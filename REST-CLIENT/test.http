@@ -1,0 +1,22 @@
+POST http://localhost:8080/users
+
+Content-Type:application/json
+
+{
+    "id":1,
+    "name":"abc"
+}
+
+POST http://localhost:8080/api/v1/categories
+Content-Type:application/json
+{
+    "category_name":"laptop",
+    "description":"about",
+    "slug":"lap"
+}
+
+PUT http://localhost:8080/api/v1/categories/2
+Content-Type:application/json
+{
+    "description":"updated"
+}
