@@ -1,5 +1,14 @@
-import categoriesService from '../services/categories.service';
+import * as categoriesService from '../services/categories.service';
 import { sendJsonSuccess } from '../helpers/responsive.helper';
+const getCategoryTree = async (req, res, next) => {
+    try {
+        const categoryTree = await categoriesService.getCategoryTree();
+        sendJsonSuccess(res, categoryTree);
+    }
+    catch (error) {
+        next(error);
+    }
+};
 const findAll = async (req, res, next) => {
     try {
         const categories = await categoriesService.findAll();
@@ -53,5 +62,6 @@ export default {
     findById,
     create,
     updateById,
-    deleteById
+    deleteById,
+    getCategoryTree
 };

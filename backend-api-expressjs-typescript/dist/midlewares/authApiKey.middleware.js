@@ -1,0 +1,21 @@
+import { env } from '../helpers/env.helpers';
+import createError from 'http-errors';
+export function authApiKey(req, res, next) {
+    const apiKeyFromClient = req.headers['x-api-key'];
+    if (typeof apiKeyFromClient !== 'string') {
+        return res.status(401).json({ message: 'API Key is missing' });
+    }
+    if (apiKeyFromClient !== env.API_KEY) {
+        console.log('Server API Key:', env.API_KEY);
+        console.log('Client API Key:', req.headers['x-api-key']);
+        return res.status(403).json({ message: 'Invalid API Key' });
+    }
+    next();
+}
+export const checkApiKey = (req, res, next) => {
+    const apiKey = req.headers['x-api-key'];
+    if (!apiKey || apiKey !== process.env.API_KEY) {
+        return next(createError(401, 'API Key is missing'));
+    }
+    next();
+};

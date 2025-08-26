@@ -1,5 +1,5 @@
 // src/server.ts
-import { env } from './helpers/env.helpers';
+import { env } from './helpers/env.helpers.js';
 import express from 'express';
 
 import app from './app';

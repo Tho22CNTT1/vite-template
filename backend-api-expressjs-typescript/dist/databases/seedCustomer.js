@@ -115,8 +115,8 @@ const seed = async () => {
                 password: hashPassword,
             };
         }));
-        await Customer.deleteMany();
-        await Customer.insertMany(customers);
+        await Customer.deleteMany({});
+        await Customer.insertMany(customers, { ordered: false });
         console.log(' Seeded customers successfully');
         process.exit(0);
     }

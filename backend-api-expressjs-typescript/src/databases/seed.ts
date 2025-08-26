@@ -1,4 +1,4 @@
-/* 
+
 import mongoose from 'mongoose'
 import { faker } from '@faker-js/faker';
 import Brand from '../models/Brand.model';
@@ -93,4 +93,3 @@ try {
 } catch (error) {
   console.log('<<=== 🚀 error ===>>', error);
 }
- */

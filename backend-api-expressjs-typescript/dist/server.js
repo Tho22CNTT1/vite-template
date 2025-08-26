@@ -1,12 +1,13 @@
 // src/server.ts
-import dotenv from 'dotenv';
-dotenv.config(); // Load biến môi trường sớm nhất có thể
+import { env } from './helpers/env.helpers.js';
 import app from './app';
 import mongoose from 'mongoose';
-const PORT = process.env.PORT || 8080;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/Batch-193';
+import dotenv from 'dotenv';
+dotenv.config();
+const PORT = env.PORT || 8080;
+const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/Batch-193';
 // Kết nối MongoDB trước khi chạy server
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(env.MONGODB_URI)
     .then(() => {
     console.log('✅ Connected to MongoDB successfully');
     app.listen(PORT, () => {
