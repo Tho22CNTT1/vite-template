@@ -1,0 +1,12 @@
+### Create staff
+POST http://localhost:8080/api/v1/staffs
+Content-Type: application/json
+
+{
+  "first_name": "Thjhkdkv",
+  "last_name": "Ngfvdfjk",
+  "email": "tho3@example.com",
+  "password": "12345678",
+  "phone": "68465658678567",        
+  "store_id": 1001
+}

@@ -1,11 +1,13 @@
-import express from 'express';
-import orderController from '../../controllers/order.controller';
+// src/routes/order.route.ts
+import { Router } from "express";
+import { OrderController } from "../../controllers/order.controller";
 
-const router = express.Router();
+const router = Router();
 
-router.get('/', orderController.getOrders);
-router.get('/:id', orderController.getOrder);
-router.post('/', orderController.createOrder);
-router.delete('/:id', orderController.deleteOrder);
+router.get("/", OrderController.getAll);       // GET all orders
+router.get("/:id", OrderController.getById);   // GET order by id
+router.post("/", OrderController.create);      // CREATE new order
+router.put("/:id", OrderController.update);    // UPDATE order by id
+router.delete("/:id", OrderController.remove); // DELETE order by id
 
 export default router;

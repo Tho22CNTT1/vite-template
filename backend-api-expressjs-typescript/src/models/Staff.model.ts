@@ -1,15 +1,72 @@
+import bcrypt from 'bcrypt';
+import { Schema, model, Document, Types } from 'mongoose';
+import { IStaffEntity } from '../types/model';
 
-import mongoose from 'mongoose';
+const saltRounds = 10;
 
-const staffSchema = new mongoose.Schema({
-    first_name: { type: String, required: true },
-    last_name: { type: String, required: true },
-    phone: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    active: { type: Number, default: 0 },
-    store_id: { type: Number, required: true },
-    manage_id: { type: Number },
+// ✅ Giao diện Staff mở rộng
+export interface IStaffDoc extends Document, IStaffEntity {
+    _id: Types.ObjectId;
+    store_id: number;
+    manage_id?: number;
+    roles: ('staff' | 'admin' | 'superadmin')[];
+    fullName?: string;
+}
+
+const staffSchema = new Schema<IStaffDoc>(
+    {
+        first_name: { type: String, required: true },
+        last_name: { type: String, required: true },
+        phone: { type: String, required: true, unique: true },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            validate: {
+                validator: function (v: string) {
+                    return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\\.,;:\s@"]+\.)+[^<>()[\]\\.,;:\s@"]{2,})$/.test(v);
+                },
+                message: (props: { value: string }) => `${props.value} is not a valid email!`,
+            },
+        },
+        password: { type: String, required: true },
+        active: { type: Boolean, default: false },
+
+
+        store_id: { type: Number, required: true },
+
+        manage_id: { type: Number },
+
+        roles: {
+            type: [String],
+            default: ['staff'],
+            enum: ['staff', 'admin', 'superadmin'],
+        },
+    },
+    {
+        timestamps: true,
+        versionKey: false,
+        toObject: {
+            virtuals: true,
+            transform: (_doc, ret: Record<string, any>) => {
+                delete ret.password;
+                return ret;
+            },
+        },
+    }
+);
+
+// ✅ Virtual field: fullName
+staffSchema.virtual('fullName').get(function (this: IStaffDoc) {
+    return `${this.first_name} ${this.last_name}`;
 });
 
-export default mongoose.model('Staff', staffSchema);
+// ✅ Hash password trước khi lưu
+staffSchema.pre<IStaffDoc>('save', async function (next) {
+    if (!this.isModified('password')) return next();
+    const hash = await bcrypt.hash(this.password, saltRounds);
+    this.password = hash;
+    next();
+});
+
+export default model<IStaffDoc>('Staff', staffSchema);

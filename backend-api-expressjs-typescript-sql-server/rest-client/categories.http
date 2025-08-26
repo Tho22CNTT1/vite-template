@@ -1,0 +1,34 @@
+### 1. Tạo một category mới
+POST http://localhost:8080/api/v1/categories
+Content-Type: application/json
+
+{
+  "name": "d",
+  "description": "d"
+}
+
+###
+
+### 2. Lấy danh sách tất cả category
+GET http://localhost:8080/api/v1/categories
+
+###
+
+### 3. Lấy chi tiết một category cụ thể (thay ID)
+GET http://localhost:8080/api/v1/categories/1
+
+###
+
+### 4. Cập nhật category theo ID (thay ID nếu cần)
+PUT http://localhost:8080/api/v1/categories/1
+Content-Type: application/json
+
+{
+  "name": "Đồ điện tử",
+  "description": "Tivi, loa, điện thoại, máy lạnh"
+}
+
+###
+
+### 5. Xoá category theo ID
+DELETE http://localhost:8080/api/v1/categories/1

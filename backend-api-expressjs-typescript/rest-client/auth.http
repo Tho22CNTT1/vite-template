@@ -1,0 +1,26 @@
+### LOGIN
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+x-api-key: gokzqphflhmkqlfuqcvpdivwclromt
+
+{
+  "email": "tho2@example.com",
+  "password": "12345678"
+}
+
+### REFRESH TOKEN
+POST http://localhost:8080/api/v1/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ODMzMjk4MTA1NDYzMmZiYTA3NTE3OCIsImVtYWlsIjoidGhvM0BleGFtcGxlLmNvbSIsInJvbGUiOiJzdGFmZiIsImlhdCI6MTc1MzYzNTM5NiwiZXhwIjoxNzU0MjQwMTk2fQ.2Q1HgZt562qn3ZaPmENxBkYZY2daDg98W8Pjuz2WlaM"
+}
+
+###
+GET http://localhost:8080/api/v1/categories
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ODMzMjk4MTA1NDYzMmZiYTA3NTE3OCIsImVtYWlsIjoidGhvM0BleGFtcGxlLmNvbSIsInJvbGUiOiJzdGFmZiIsImlhdCI6MTc1MzY0NDExMywiZXhwIjoxNzUzNjQ3NzEzfQ.5541f8St5jiQQd1TZGBdgqX6yd46DB4cLa5DyYuHrYo
+
+### get profile
+POST http://localhost:8080/api/v1/auth/refresh-token
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ODMzMTQ1YWJjYjkxZjlhNzVlZGE4MSIsInJvbGVzIjpbInN0YWZmIl0sImlhdCI6MTc1NDYxNDEwMCwiZXhwIjoxNzU0NjE3NzAwfQ.tX0pc1vwvsHiW4A8rKcNFyeUno2RopLjf06GkOts_u4

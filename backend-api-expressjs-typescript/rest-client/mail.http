@@ -1,0 +1,8 @@
+POST http://localhost:8080/api/v1/test/send-mail
+Content-Type: application/json
+
+{
+  "to": "swiftlove218@gmail.com",
+  "subject": "Hello from Node.js",
+  "text": "Xin chào! Đây là mail test 🚀"
+}

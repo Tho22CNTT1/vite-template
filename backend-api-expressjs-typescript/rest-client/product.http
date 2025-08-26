@@ -1,0 +1,4 @@
+GET http://localhost:8080/api/v1/products
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ODMzMTQ1YWJjYjkxZjlhNzVlZGE4MSIsInJvbGVzIjpbInN0YWZmIl0sImlhdCI6MTc1NDg5MDk3MSwiZXhwIjoxNzU0ODk0NTcxfQ.IYx6mVddtg_9neLepyD9YJ9ibO5DTxqIo9VQGOK5AFA
+x-api-key: gokzqphflhmkqlfuqcvpdivwclromt

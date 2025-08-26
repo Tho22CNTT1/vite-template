@@ -1,19 +1,42 @@
-import { Order } from "../models/Order.model";
+// src/services/order.service.ts
+import { OrderModel, IOrder } from "../models/Order.model";
+import { Types } from "mongoose";
 
-export const getAllOrders = async () => {
-    return await Order.find().populate('customer_id');
+export const OrderService = {
+    async findAll() {
+        return OrderModel.find()
+            .populate("customer_id")
+            .populate("staff_id")
+            .populate("order_details.product_id")
+            .exec();
+    },
+
+    async findById(id: string) {
+        return OrderModel.findById(new Types.ObjectId(id))
+            .populate("customer_id")
+            .populate("staff_id")
+            .populate("order_details.product_id")
+            .exec();
+    },
+
+    async create(orderData: Partial<IOrder>) {
+        const order = new OrderModel(orderData);
+        return order.save();
+    },
+
+    async updateById(id: string, updateData: Partial<IOrder>) {
+        return OrderModel.findByIdAndUpdate(
+            new Types.ObjectId(id),
+            updateData,
+            { new: true }
+        )
+            .populate("customer_id")
+            .populate("staff_id")
+            .populate("order_details.product_id")
+            .exec();
+    },
+
+    async deleteById(id: string) {
+        return OrderModel.findByIdAndDelete(new Types.ObjectId(id)).exec();
+    },
 };
-
-export const getOrderById = async (id: string) => {
-    return await Order.findById(id).populate('customer_id');
-};
-
-export const createOrder = async (data: any) => {
-    const newOrder = new Order(data);
-    return await newOrder.save()
-}
-
-export const deleteOrder = async (id: string) => {
-    return await Order.findByIdAndDelete(id);
-}
-

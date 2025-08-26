@@ -1,7 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 import createHttpError from 'http-errors';
-import categoriesService from '../services/categories.service';
+import * as categoriesService from '../services/categories.service';
 import { sendJsonSuccess } from '../helpers/responsive.helper';
+
+const getCategoryTree = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const categoryTree = await categoriesService.getCategoryTree();
+    sendJsonSuccess(res, categoryTree);
+  } catch (error) {
+    next(error);
+  }
+};
 
 const findAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -56,5 +65,6 @@ export default {
   findById,
   create,
   updateById,
-  deleteById
+  deleteById,
+  getCategoryTree
 };

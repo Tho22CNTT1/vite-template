@@ -1,51 +1,38 @@
-import createError from 'http-errors';
 import Category from '../models/Category.model';
-
-export interface ICategoryDTO {
-    category_name: string;
-    description?: string;
-    slug?: string;
+import createHttpError from 'http-errors';
+export const getCategoryTree = async () => {
+    const category = await Category
+        .find()
+        .select("_id category_name slug")
+    return category;
 }
-
-const findAll = async () => {
+export const findAll = async () => {
     return await Category.find();
 };
 
-const findById = async (id: string) => {
+export const findById = async (id: string) => {
     const category = await Category.findById(id);
-    if (!category) {
-        throw createError(404, "Category not found");
-    }
+    if (!category) throw createHttpError(404, 'Category not found');
     return category;
 };
 
-const create = async (payload: ICategoryDTO) => {
-    const newCategory = new Category({
-        category_name: payload.category_name,
-        description: payload.description,
-        slug: payload.slug,
+export const create = async (data: { name: string }) => {
+    const exists = await Category.findOne({ name: data.name });
+    if (exists) throw createHttpError(400, 'Category already exists');
+    return await new Category(data).save();
+};
+
+export const updateById = async (id: string, data: { name: string }) => {
+    const updated = await Category.findByIdAndUpdate(id, data, {
+        new: true,
+        runValidators: true,
     });
-    await newCategory.save();
-    return newCategory;
+    if (!updated) throw createHttpError(404, 'Category not found');
+    return updated;
 };
 
-const updateById = async (id: string, payload: ICategoryDTO) => {
-    const category = await findById(id);
-    Object.assign(category, payload);
-    await category.save();
-    return category;
-};
-
-const deleteById = async (id: string) => {
-    const category = await Category.findByIdAndDelete(id);
-    if (!category) throw createError(404, 'Category not found');
-    return category;
-};
-
-export default {
-    findAll,
-    findById,
-    create,
-    updateById,
-    deleteById
+export const deleteById = async (id: string) => {
+    const deleted = await Category.findByIdAndDelete(id);
+    if (!deleted) throw createHttpError(404, 'Category not found');
+    return deleted;
 };

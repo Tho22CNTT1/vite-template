@@ -1,49 +1,57 @@
-import { Request, Response } from 'express';
-import * as orderService from '../services/orders.service';
+// src/controllers/order.controller.ts
+import { Request, Response, NextFunction } from "express";
+import { OrderService } from "../services/orders.service";
 
-const getOrders = async (req: Request, res: Response) => {
-    try {
-        const orders = await orderService.getAllOrders();
-        res.json(orders);
-    } catch (error) {
-        res.status(500).json({ message: 'Lỗi khi lấy đơn hàng', error });
-    }
+export const OrderController = {
+    async getAll(req: Request, res: Response, next: NextFunction) {
+        try {
+            const orders = await OrderService.findAll();
+            res.json({ success: true, data: orders });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    async getById(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            const order = await OrderService.findById(id);
+            if (!order) return res.status(404).json({ success: false, message: "Order not found" });
+            res.json({ success: true, data: order });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    async create(req: Request, res: Response, next: NextFunction) {
+        try {
+            const order = await OrderService.create(req.body);
+            //send mail
+            res.status(201).json({ success: true, data: order });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    async update(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            const order = await OrderService.updateById(id, req.body);
+            if (!order) return res.status(404).json({ success: false, message: "Order not found" });
+            res.json({ success: true, data: order });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    async remove(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            const deleted = await OrderService.deleteById(id);
+            if (!deleted) return res.status(404).json({ success: false, message: "Order not found" });
+            res.json({ success: true, message: "Order deleted" });
+        } catch (err) {
+            next(err);
+        }
+    },
 };
-
-const getOrder = async (req: Request, res: Response) => {
-    try {
-        const order = await orderService.getOrderById(req.params.id);
-        if (!order) return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
-        res.json(order);
-    } catch (error) {
-        res.status(500).json({ message: 'Lỗi server', error });
-    }
-};
-
-const createOrder = async (req: Request, res: Response) => {
-    try {
-        const newOrder = await orderService.createOrder(req.body);
-        res.status(201).json(newOrder);
-    } catch (error) {
-        res.status(500).json({ message: 'Tạo đơn hàng thất bại', error });
-    }
-};
-
-const deleteOrder = async (req: Request, res: Response) => {
-    try {
-        await orderService.deleteOrder(req.params.id);
-        res.json({ message: 'Đã xoá đơn hàng' });
-    } catch (error) {
-        res.status(500).json({ message: 'Không thể xoá', error });
-    }
-};
-
-// ✅ Gom vào object để export mặc định
-const orderController = {
-    getOrders,
-    getOrder,
-    createOrder,
-    deleteOrder
-};
-
-export default orderController;
